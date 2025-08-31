@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Trino сервер
+  trino:
+    image: trinodb/trino:latest
+    container_name: trino
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./etc/catalog:/etc/trino/catalog
+    depends_on:
+      - postgres
+      - clickhouse
+
+  trino-cli:
+    image: trinodb/trino:latest
+    container_name: trino-cli
+    depends_on:
+      - trino
+    entrypoint: [ "trino", "--server", "http://trino:8080" ]
+    stdin_open: true
+    tty: true
+
+
+
+  # PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: trino
+      POSTGRES_PASSWORD: trino
+      POSTGRES_DB: demo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # ClickHouse
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse
+    environment:
+      CLICKHOUSE_USER: trino
+      CLICKHOUSE_PASSWORD: trino
+      CLICKHOUSE_DB: default
+    ports:
+      - "8123:8123"   # HTTP
+      - "9000:9000"   # Native
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+
+volumes:
+  postgres_data:
+  clickhouse_data:
