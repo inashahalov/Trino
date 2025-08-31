@@ -11,8 +11,6 @@ Trino выступает как федеративный SQL-координат�
 ## 📁 Структура проекта
 
 ```
-<img width="280" height="247" alt="image" src="https://github.com/user-attachments/assets/a56f295a-d846-48bb-bd4b-d6577d872378" />
-
 
 ![Структура проекта](https://github.com/user-attachments/assets/524bdc33-bc7b-4119-814b-976575f92f50)
 
